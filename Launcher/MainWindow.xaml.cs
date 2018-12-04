@@ -22,31 +22,41 @@ namespace Launcher
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
+        CurrentDir CurrentDirObj = new CurrentDir();
+
         public MainWindow()
         {
             InitializeComponent();
 
-            foreach (var drive in DriveInfo.GetDrives())
+            updateLayout();
+        }
+
+        private void updateLayout()
+        {
+            dirs.Items.Clear();
+
+            foreach (var dir in CurrentDirObj.Directories)
             {
-                if (drive.IsReady == false) continue;
+                ListBoxItem dirItem = new ListBoxItem();
 
-                ListBoxItem driveItem = new ListBoxItem();
-
-                driveItem.Content = drive.Name;
-                drives.Items.Add(driveItem);
+                dirItem.Content = dir;
+                dirs.Items.Add(dirItem);
             }
         }
 
         private void OnSelected(object sender, SelectionChangedEventArgs args)
         {
-            ListBoxItem lbi = new ListBoxItem();
-            lbi = ((sender as ListBox).SelectedItem as ListBoxItem);
-
-            var directories = Directory.GetDirectories(lbi.Content.ToString());
-
-            foreach (var dir in directories)
+            if (dirs.SelectedItem != null)
             {
-                drives.Items.Add(dir.ToString());
+                ListBoxItem lbi = new ListBoxItem();
+                lbi = ((sender as ListBox).SelectedItem as ListBoxItem);
+                string path = lbi.Content.ToString();
+
+                CurrentDirObj.ChangeDir(path);
+
+                updateLayout();
+
+                dirs.SelectedIndex = -1;
             }
         }
     }
