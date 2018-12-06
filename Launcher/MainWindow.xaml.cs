@@ -27,37 +27,28 @@ namespace Launcher
         public MainWindow()
         {
             InitializeComponent();
-
-            updateLayout();
-        }
-
-        private void updateLayout()
-        {
-            dirs.Items.Clear();
-
-            foreach (var dir in CurrentDirObj.Directories)
-            {
-                ListBoxItem dirItem = new ListBoxItem();
-
-                dirItem.Content = dir;
-                dirs.Items.Add(dirItem);
-            }
+            Dirs.DataContext = CurrentDirObj;
         }
 
         private void OnSelected(object sender, SelectionChangedEventArgs args)
         {
-            if (dirs.SelectedItem != null)
+            
+            if (Dirs.SelectedIndex != -1)
             {
-                ListBoxItem lbi = new ListBoxItem();
-                lbi = ((sender as ListBox).SelectedItem as ListBoxItem);
-                string path = lbi.Content.ToString();
+                int selected = Dirs.SelectedIndex; 
+                string path = CurrentDirObj.Directories[selected];
 
                 CurrentDirObj.ChangeDir(path);
 
-                updateLayout();
+                CurrentPath.Content = CurrentDirObj.Path;
 
-                dirs.SelectedIndex = -1;
+                Dirs.SelectedIndex = -1;
             }
+        }
+
+        private void Back(object sender, RoutedEventArgs e)
+        {
+            CurrentDirObj.Back();
         }
     }
 }

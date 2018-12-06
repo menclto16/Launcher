@@ -7,29 +7,15 @@
         xmlns:local="clr-namespace:Launcher"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Controls:MetroWindow.RightWindowCommands>
-        <Controls:WindowCommands>
-            <Button Content="settings" />
-            <Button>
-                <StackPanel Orientation="Horizontal">
-                    <Rectangle Width="20"
-                   Height="20"
-                   Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
-                        <Rectangle.OpacityMask>
-                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_cupcake}" />
-                        </Rectangle.OpacityMask>
-                    </Rectangle>
-                    <TextBlock Margin="4 0 0 0"
-                   VerticalAlignment="Center"
-                   Text="deploy cupcakes" />
-                </StackPanel>
-            </Button>
-        </Controls:WindowCommands>
-    </Controls:MetroWindow.RightWindowCommands>
     <Grid>
-        <StackPanel Orientation="Vertical">
-            <ListBox x:Name="dirs" SelectionChanged="OnSelected" SelectionMode="Single"/>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="DeepPink">
+                <Button Content="BACK" Click="Back" Background="Transparent" BorderThickness="0"/>
+                <Label x:Name="CurrentPath" Content="/"/>
+            </StackPanel>
+            <StackPanel>
+                <ListBox x:Name="Dirs" Height="300" ItemsSource="{Binding Directories}" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="OnSelected" SelectionMode="Single"/>
+            </StackPanel>
         </StackPanel>
-        
     </Grid>
 </Controls:MetroWindow>

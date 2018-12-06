@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,16 +10,28 @@ namespace Launcher
 {
     class CurrentDir
     {
-        public List<String> Directories = new List<String>();
+        public ObservableCollection<string> Directories { get; set; }
         public string Path { get; set; }
 
         public CurrentDir()
         {
+            Directories = new ObservableCollection<string>();
+
             foreach (var drive in DriveInfo.GetDrives())
             {
                 if (drive.IsReady == false) continue;
 
                 Directories.Add(drive.Name);
+            }
+        }
+
+        public void Back()
+        {
+            if (Path != null)
+            {
+                DirectoryInfo parentDir = Directory.GetParent(Path);
+                Path = parentDir.FullName;
+                ChangeDir(Path);
             }
         }
 
