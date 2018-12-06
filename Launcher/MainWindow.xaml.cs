@@ -48,7 +48,16 @@ namespace Launcher
 
         private void Back(object sender, RoutedEventArgs e)
         {
-            CurrentDirObj.Back();
+            if (CurrentDirObj.Back())
+            {
+                CurrentPath.Content = CurrentDirObj.Path;
+            }
+            else
+            {
+                CurrentPath.Content = @"\";
+            }
+            
+           
         }
     }
 }

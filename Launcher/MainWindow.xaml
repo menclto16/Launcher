@@ -9,10 +9,11 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="DeepPink">
-                <Button Content="BACK" Click="Back" Background="Transparent" BorderThickness="0"/>
-                <Label x:Name="CurrentPath" Content="/"/>
-            </StackPanel>
+            <DockPanel Background="CornflowerBlue">
+                <Button Content="BACK" Click="Back" Background="Transparent"/>
+                <Label x:Name="CurrentPath" Content="\"/>
+                <Button Content="CONFIRM PATH" Click="Back" Background="Transparent" HorizontalAlignment="Right"/>
+            </DockPanel>
             <StackPanel>
                 <ListBox x:Name="Dirs" Height="300" ItemsSource="{Binding Directories}" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="OnSelected" SelectionMode="Single"/>
             </StackPanel>

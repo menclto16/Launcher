@@ -17,22 +17,26 @@ namespace Launcher
         {
             Directories = new ObservableCollection<string>();
 
-            foreach (var drive in DriveInfo.GetDrives())
-            {
-                if (drive.IsReady == false) continue;
-
-                Directories.Add(drive.Name);
-            }
+            goToRoot();
         }
 
-        public void Back()
+        public bool Back()
         {
             if (Path != null)
             {
                 DirectoryInfo parentDir = Directory.GetParent(Path);
-                Path = parentDir.FullName;
-                ChangeDir(Path);
+                if (parentDir == null)
+                {
+                    goToRoot();
+                    return false;
+                }
+                else
+                {
+                    Path = parentDir.FullName;
+                    ChangeDir(Path);
+                }
             }
+            return true;
         }
 
         public void ChangeDir(string path)
@@ -46,6 +50,18 @@ namespace Launcher
             foreach (var dir in directories)
             {
                 Directories.Add(dir.ToString());
+            }
+        }
+
+        private void goToRoot()
+        {
+            Directories.Clear();
+
+            foreach (var drive in DriveInfo.GetDrives())
+            {
+                if (drive.IsReady == false) continue;
+
+                Directories.Add(drive.Name);
             }
         }
     }
