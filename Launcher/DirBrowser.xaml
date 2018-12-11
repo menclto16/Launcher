@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="Launcher.DirBrowser"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+      xmlns:local="clr-namespace:Launcher"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <StackPanel>
+            <DockPanel Background="CornflowerBlue">
+                <Button Content="BACK" Click="Back" Background="Transparent"/>
+                <Label x:Name="CurrentPath" Content="\"/>
+                <Button Content="CONFIRM PATH" Click="ConfirmPath" Background="Transparent" HorizontalAlignment="Right"/>
+            </DockPanel>
+            <StackPanel>
+                <ListBox x:Name="Dirs" Height="300" ItemsSource="{Binding Directories}" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="OnSelected" SelectionMode="Single"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>
