@@ -116,18 +116,24 @@ namespace Launcher
 
         private void recursiveBrowse(string path, ref List<string> projectPaths)
         {
-            var directories = Directory.GetDirectories(path);
-            var files = Directory.GetFiles(path);
-
-            foreach (var file in files)
+            try
             {
-                FileInfo fi = new FileInfo(file);
-                if (fi.Extension == ".csproj") projectPaths.Add(file);
-            }
+                var directories = Directory.GetDirectories(path);
+                var files = Directory.GetFiles(path);
 
-            foreach (var dir in directories)
+                foreach (var file in files)
+                {
+                    FileInfo fi = new FileInfo(file);
+                    if (fi.Extension == ".csproj") projectPaths.Add(file);
+                }
+
+                foreach (var dir in directories)
+                {
+                    recursiveBrowse(dir, ref projectPaths);
+                }
+            } catch
             {
-                recursiveBrowse(dir, ref projectPaths);
+
             }
         }
     }
