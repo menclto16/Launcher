@@ -9,13 +9,13 @@ using System.Xml.Linq;
 
 namespace Launcher
 {
-    class CurrentDir
+    class DirBrowser
     {
         public ObservableCollection<string> Directories { get; set; }
         public string Path { get; set; }
         public List<Executable> Executables { get; set; }
 
-        public CurrentDir()
+        public DirBrowser()
         {
             Directories = new ObservableCollection<string>();
 

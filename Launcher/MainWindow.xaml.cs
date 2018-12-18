@@ -23,12 +23,12 @@ namespace Launcher
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        CurrentDir CurrentDirObj = new CurrentDir();
+        DirBrowser DirBrowserObj = new DirBrowser();
 
         public MainWindow()
         {
             InitializeComponent();
-            Dirs.DataContext = CurrentDirObj;
+            Dirs.DataContext = DirBrowserObj;
         }
 
         private void OnSelected(object sender, SelectionChangedEventArgs args)
@@ -36,11 +36,11 @@ namespace Launcher
             if (Dirs.SelectedIndex != -1)
             {
                 int selected = Dirs.SelectedIndex; 
-                string path = CurrentDirObj.Directories[selected];
+                string path = DirBrowserObj.Directories[selected];
 
-                if (!CurrentDirObj.ChangeDir(path)) showDialog();
+                if (!DirBrowserObj.ChangeDir(path)) showDialog();
 
-                CurrentPath.Content = CurrentDirObj.Path;
+                CurrentPath.Content = DirBrowserObj.Path;
 
                 Dirs.SelectedIndex = -1;
             }
@@ -48,9 +48,9 @@ namespace Launcher
 
         private void Back(object sender, RoutedEventArgs e)
         {
-            if (CurrentDirObj.Back())
+            if (DirBrowserObj.Back())
             {
-                CurrentPath.Content = CurrentDirObj.Path;
+                CurrentPath.Content = DirBrowserObj.Path;
             }
             else
             {
@@ -65,7 +65,20 @@ namespace Launcher
 
         private void ConfirmPath(object sender, RoutedEventArgs e)
         {
-            CurrentDirObj.GetExecutables();
+            DirBrowserObj.GetExecutables();
+
+            foreach (var executable in DirBrowserObj.Executables)
+            {
+                Tile tile = new Tile();
+                tile.Title = executable.Filename;
+                ImageBrush icon = new ImageBrush();
+                icon.ImageSource = executable.Icon;
+                icon.Stretch = Stretch.None;
+                icon.AlignmentX = AlignmentX.Center;
+                icon.AlignmentY = AlignmentY.Center;
+                tile.Background = icon;
+                AppPanel.Children.Add(tile);
+            }
         }
     }
 }

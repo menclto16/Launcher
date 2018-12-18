@@ -7,6 +7,20 @@
         xmlns:local="clr-namespace:Launcher"
         mc:Ignorable="d"
         Title="Launcher" Height="450" Width="800">
+    <Window.Resources>
+        <Style TargetType="Controls:Tile">
+            <Setter Property="HorizontalAlignment" Value="left" />
+            <Setter Property="VerticalAlignment" Value="top" />
+            <Setter Property="Width" Value="140" />
+            <Setter Property="Height" Value="140" />
+            <Setter Property="Background">
+                <Setter.Value>
+                    <ImageBrush Stretch="None" AlignmentX="Center" AlignmentY="Center">
+                    </ImageBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
         <TabControl>
             <TabItem Header="Browse">
@@ -22,12 +36,10 @@
                 </StackPanel>
             </TabItem>
             <TabItem Header="Apps">
-                <WrapPanel>
-                    <Controls:Tile Title="Hello!" Width="100" Height="100" Count="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                    <Controls:Tile Title="Hello!" Width="100" Height="100" Count="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                </WrapPanel>
+                <ScrollViewer x:Name="MyScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <WrapPanel x:Name="AppPanel" MinWidth="140" Width="{Binding ElementName=MyScrollViewer, Path=ViewportWidth}"/>
+                </ScrollViewer>
             </TabItem>
         </TabControl>
-        
     </Grid>
 </Controls:MetroWindow>
