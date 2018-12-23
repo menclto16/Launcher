@@ -87,7 +87,9 @@ namespace Launcher
 
             foreach (var projectPath in projectPaths)
             {
-                XDocument projDefinition = XDocument.Load(projectPaths[0]);
+                XDocument projDefinition = XDocument.Load(projectPath);
+
+                if (projDefinition.Element(xmlns + "Project") == null) continue;
 
                 IEnumerable<XNode> assemblyResultsEnumerable = projDefinition
                     .Element(xmlns + "Project")

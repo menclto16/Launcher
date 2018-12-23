@@ -60,7 +60,7 @@ namespace Launcher
 
         async private void showDialog()
         {
-            await this.ShowMessageAsync("Error", "You don't have permissions to access the directory");
+            await this.ShowMessageAsync("Error", "Insufficient permission to access the directory");
         }
 
         private void ConfirmPath(object sender, RoutedEventArgs e)
