@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -35,7 +36,7 @@ namespace Launcher
         {
             if (Dirs.SelectedIndex != -1)
             {
-                int selected = Dirs.SelectedIndex; 
+                int selected = Dirs.SelectedIndex;
                 string path = DirBrowserObj.Directories[selected];
 
                 if (!DirBrowserObj.ChangeDir(path)) showDialog();
@@ -70,7 +71,9 @@ namespace Launcher
             foreach (var executable in DirBrowserObj.Executables)
             {
                 Tile tile = new Tile();
+                tile.Name = "executable" + DirBrowserObj.Executables.IndexOf(executable).ToString();
                 tile.Title = executable.Filename;
+                tile.Click += new RoutedEventHandler(ExecutableClick);
                 ImageBrush icon = new ImageBrush();
                 icon.ImageSource = executable.Icon;
                 icon.Stretch = Stretch.None;
@@ -79,6 +82,13 @@ namespace Launcher
                 tile.Background = icon;
                 AppPanel.Children.Add(tile);
             }
+        }
+
+        private void ExecutableClick(object sender, RoutedEventArgs e)
+        {
+            Tile tile = (Tile)sender;
+            int exeIndex = Int32.Parse(Regex.Match(tile.Name, @"\d+").Value);
+            DirBrowserObj.Executables[exeIndex].RunExecutable();
         }
     }
 }
