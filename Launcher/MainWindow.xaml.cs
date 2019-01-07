@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -37,9 +38,9 @@ namespace Launcher
             if (Dirs.SelectedIndex != -1)
             {
                 int selected = Dirs.SelectedIndex;
-                string path = DirBrowserObj.Directories[selected];
+                string path = DirBrowserObj.Paths[selected];
 
-                if (!DirBrowserObj.ChangeDir(path)) showDialog();
+                if (!DirBrowserObj.ChangeDir(path)) showPermissionDialog();
 
                 CurrentPath.Content = DirBrowserObj.Path;
 
@@ -59,14 +60,21 @@ namespace Launcher
             }
         }
 
-        async private void showDialog()
+        async private void showPermissionDialog()
         {
-            await this.ShowMessageAsync("Error", "Insufficient permission to access the directory");
+            await this.ShowMessageAsync("Error", "Insufficient permission!");
         }
 
-        private void ConfirmPath(object sender, RoutedEventArgs e)
+        private async void ConfirmPath(object sender, RoutedEventArgs e)
         {
-            DirBrowserObj.GetExecutables();
+            AppPanel.Children.Clear();
+            AppMessage.ClearValue(TextBlock.HeightProperty);
+            
+            Task task = Task.Run(() => DirBrowserObj.GetExecutables());
+
+            var controller = await this.ShowProgressAsync("Please wait...", "Searching for applications");
+            controller.SetIndeterminate();
+            await task;
 
             foreach (var executable in DirBrowserObj.Executables)
             {
@@ -74,14 +82,29 @@ namespace Launcher
                 tile.Name = "executable" + DirBrowserObj.Executables.IndexOf(executable).ToString();
                 tile.Title = executable.Filename;
                 tile.Click += new RoutedEventHandler(ExecutableClick);
-                ImageBrush icon = new ImageBrush();
-                icon.ImageSource = executable.Icon;
-                icon.Stretch = Stretch.None;
-                icon.AlignmentX = AlignmentX.Center;
-                icon.AlignmentY = AlignmentY.Center;
-                tile.Background = icon;
+                ImageBrush icon = new ImageBrush()
+                {
+                    ImageSource = executable.Icon,
+                    Stretch = Stretch.None,
+                    AlignmentX = AlignmentX.Center,
+                    AlignmentY = AlignmentY.Center
+                };
+                Rectangle rec = new Rectangle()
+                {
+                    Width = 90,
+                    Height = 90,
+                    Fill = icon,
+                };
+                tile.Content = rec;
                 AppPanel.Children.Add(tile);
             }
+
+            if (AppPanel.Children.Count != 0) AppMessage.Height = 0;
+
+            TabMenu.SelectedItem = AppTab;
+            AppTab.IsSelected = true;
+
+            await controller.CloseAsync();
         }
 
         private void ExecutableClick(object sender, RoutedEventArgs e)

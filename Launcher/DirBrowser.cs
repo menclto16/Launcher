@@ -6,18 +6,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Threading;
 
 namespace Launcher
 {
     class DirBrowser
     {
-        public ObservableCollection<string> Directories { get; set; }
+        public List<string> Paths { get; set; }
+        public ObservableCollection<string> DirectoryNames { get; set; }
         public string Path { get; set; }
         public List<Executable> Executables { get; set; }
 
         public DirBrowser()
         {
-            Directories = new ObservableCollection<string>();
+            Paths = new List<string>();
+            DirectoryNames = new ObservableCollection<string>();
 
             goToRoot();
         }
@@ -49,11 +52,13 @@ namespace Launcher
 
                 Path = path;
 
-                Directories.Clear();
+                clearPaths();
 
                 foreach (var dir in directories)
                 {
-                    Directories.Add(dir.ToString());
+                    Paths.Add(dir.ToString());
+                    var dirName = new DirectoryInfo(dir).Name;
+                    DirectoryNames.Add(dirName);
                 }
             }
             catch (Exception)
@@ -66,14 +71,21 @@ namespace Launcher
 
         private void goToRoot()
         {
-            Directories.Clear();
+            clearPaths();
 
             foreach (var drive in DriveInfo.GetDrives())
             {
                 if (drive.IsReady == false) continue;
 
-                Directories.Add(drive.Name);
+                Paths.Add(drive.Name);
+                DirectoryNames.Add(drive.Name);
             }
+        }
+
+        private void clearPaths()
+        {
+            Paths.Clear();
+            DirectoryNames.Clear();
         }
 
         public void GetExecutables()

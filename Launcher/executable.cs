@@ -41,7 +41,10 @@ namespace Launcher
 
         public void RunExecutable()
         {
-            Process.Start(FilePath);
+            Process proc = new Process();
+            proc.StartInfo.FileName = FilePath;
+            proc.StartInfo.WorkingDirectory = Path.GetDirectoryName(FilePath);
+            proc.Start();
         }
     }
 }

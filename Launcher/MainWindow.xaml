@@ -6,38 +6,37 @@
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:Launcher"
         mc:Ignorable="d"
-        Title="Launcher" Height="450" Width="800">
+        Title="Launcher" Height="450" Width="750">
     <Window.Resources>
         <Style TargetType="Controls:Tile">
-            <Setter Property="HorizontalAlignment" Value="left" />
-            <Setter Property="VerticalAlignment" Value="top" />
-            <Setter Property="Width" Value="140" />
-            <Setter Property="Height" Value="140" />
-            <Setter Property="Background">
-                <Setter.Value>
-                    <ImageBrush Stretch="None" AlignmentX="Center" AlignmentY="Center">
-                    </ImageBrush>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="TitleFontSize" Value="10"/>
+            <Setter Property="HorizontalTitleAlignment" Value="Center"/>
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Height" Value="100"/>
         </Style>
     </Window.Resources>
     <Grid>
-        <TabControl>
-            <TabItem Header="Browse">
-                <StackPanel>
+        <TabControl x:Name="TabMenu">
+            <TabItem x:Name="BrowseTab" Header="Browse">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
                     <DockPanel Background="CornflowerBlue">
                         <Button Content="BACK" Click="Back" Background="Transparent"/>
                         <Label x:Name="CurrentPath" Content="\"/>
                         <Button Content="CONFIRM PATH" Click="ConfirmPath" Background="Transparent" HorizontalAlignment="Right"/>
                     </DockPanel>
-                    <StackPanel>
-                        <ListBox x:Name="Dirs" Height="300" ItemsSource="{Binding Directories}" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="OnSelected" SelectionMode="Single"/>
-                    </StackPanel>
-                </StackPanel>
+                    <ListBox x:Name="Dirs" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding DirectoryNames}" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="OnSelected" SelectionMode="Single"/>
+                </Grid>
             </TabItem>
-            <TabItem Header="Apps">
-                <ScrollViewer x:Name="MyScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <WrapPanel x:Name="AppPanel" MinWidth="140" Width="{Binding ElementName=MyScrollViewer, Path=ViewportWidth}"/>
+            <TabItem x:Name="AppTab" Header="Apps">
+                <ScrollViewer x:Name="MyScrollViewer" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock x:Name="AppMessage" FontSize="16" HorizontalAlignment="Center" Text="No applications found..."/>
+                        <WrapPanel x:Name="AppPanel" HorizontalAlignment="Center" MinWidth="140" Width="{Binding ElementName=MyScrollViewer, Path=ViewportWidth}"/>
+                    </StackPanel>
                 </ScrollViewer>
             </TabItem>
         </TabControl>
